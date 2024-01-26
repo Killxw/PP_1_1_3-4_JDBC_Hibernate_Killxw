@@ -12,12 +12,8 @@ public class Util {
     private static Util instance;
     private Connection connection;
 
-    private Util() {
-        try {
-            this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    private Util() throws SQLException {
+        this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 
     public Connection getConnection() throws SQLException {
@@ -27,7 +23,7 @@ public class Util {
         return connection;
     }
 
-    public static Util getInstance() {
+    public static Util getInstance() throws SQLException {
         if (instance == null) {
             instance = new Util();
         }
