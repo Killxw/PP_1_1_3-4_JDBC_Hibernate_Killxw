@@ -4,6 +4,7 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -97,14 +98,12 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         Session session = null;
-        List<User> users = null;
+        List<User> userList = null;
         try {
             session = Util.getSessionFactory().openSession();
             session.beginTransaction();
-            String sql = "SELECT * FROM users";
-            users = session.createSQLQuery(sql).addEntity(User.class).list();
-            System.out.println(users.size());
-            session.getTransaction().commit();
+            Query query = session.createQuery("FROM User ");
+            userList = query.list();
         } catch (HibernateException e) {
             System.out.println("Произошла ошибка при создании таблицы");
             e.printStackTrace();
@@ -112,7 +111,7 @@ public class UserDaoHibernateImpl implements UserDao {
         } finally {
             if (session != null) session.close();
         }
-        return users;
+        return userList;
     }
 
     @Override
